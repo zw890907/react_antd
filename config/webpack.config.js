@@ -49,6 +49,8 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
+const lessRegex = /\.less$/;
+const lessModuleRegex = /\.module\.less$/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -110,20 +112,45 @@ module.exports = function(webpackEnv) {
       },
     ].filter(Boolean);
     if (preProcessor) {
-      loaders.push(
-        {
-          loader: require.resolve('resolve-url-loader'),
+      let loader = require.resolve(preProcessor)
+      if (preProcessor === "less-loader") {
+        loader = {
+          loader,
           options: {
-            sourceMap: isEnvProduction && shouldUseSourceMap,
-          },
-        },
-        {
-          loader: require.resolve(preProcessor),
-          options: {
-            sourceMap: true,
-          },
+            modifyVars: {
+              'primary-color': '#1890ff', // 全局主色
+              'link-color': '#1890ff', // 链接色
+              'success-color': '#52c41a', // 成功色
+              'warning-color': '#faad14', // 警告色
+              'error-color': '#f5222d', // 错误色
+              'font-size-base': '14px', // 主字号
+              'heading-color': 'rgba(0, 0, 0, 0.85)', // 标题色
+              'text-color': 'rgba(0, 0, 0, 0.65)', // 主文本色
+              'text-color-secondary': 'rgba(0, 0, 0, 0.45)', // 次文本色
+              'disabled-color': 'rgba(0, 0, 0, 0.25)', // 失效色
+              'border-radius-base': '5px', // 组件/浮层圆角
+              'border-color-base': '#d9d9d9', // 边框色
+              'box-shadow-base': '0 2px 8px rgba(0, 0, 0, 0.15)', // 浮层阴影
+            },
+            javascriptEnabled: true,
+          }
         }
-      );
+      }
+      loaders.push(loader);
+      // loaders.push(
+      //   {
+      //     loader: require.resolve('resolve-url-loader'),
+      //     options: {
+      //       sourceMap: isEnvProduction && shouldUseSourceMap,
+      //     },
+      //   },
+      //   {
+      //     loader: require.resolve(preProcessor),
+      //     options: {
+      //       sourceMap: true,
+      //     },
+      //   }
+      // );
     }
     return loaders;
   };
@@ -298,6 +325,8 @@ module.exports = function(webpackEnv) {
           'scheduler/tracing': 'scheduler/tracing-profiling',
         }),
         ...(modules.webpackAliases || {}),
+        // 路径引用 @
+        '@': paths.appSrc,
       },
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding
@@ -483,6 +512,31 @@ module.exports = function(webpackEnv) {
                   },
                 },
                 'sass-loader'
+              ),
+            },
+            {
+              test: lessRegex,
+              exclude: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 2,
+                  sourceMap: isEnvProduction && shouldUseSourceMap,
+                },
+                'less-loader'
+              ),
+              sideEffects: true,
+            },
+            {
+              test: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 2,
+                  sourceMap: isEnvProduction && shouldUseSourceMap,
+                  modules: {
+                      getLocalIdent: getCSSModuleLocalIdent,
+                  },
+                },
+                'less-loader'
               ),
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
