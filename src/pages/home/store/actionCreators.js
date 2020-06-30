@@ -19,7 +19,7 @@ export const getAppList = (data) => {
             // debugger
             const action = {
                 type: contants.GET_APP_LIST,
-                data: res.data
+                data: res.data.data
             }
             dispatch(action)
             // return action

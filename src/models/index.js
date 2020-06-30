@@ -1,1 +1,1 @@
-export { default as header } from './header';
+export { default as home } from './home';

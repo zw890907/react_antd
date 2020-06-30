@@ -12,7 +12,8 @@ const getData = (state, action) => {
 }
 
 const getAppList = (state, action) => {
-    return state.set('appList', action)
+    // debugger
+    return state.set('appList', action.data)
 }
 
 export default (state = defaultState, action) => {

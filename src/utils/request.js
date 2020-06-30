@@ -55,7 +55,7 @@ request.interceptors.response.use(
     // 获取到数据处理
     // console.log(res);
 
-    if (res.data && res.data.state == 200 || res.data.state == true) {
+    if (res.data && (res.data.state === 200 || res.data.state === true)) {
       return res.data;
     }
     if (res.data && res.data.code === 10000) {
@@ -70,19 +70,19 @@ request.interceptors.response.use(
     //   return res.data;
     // }
     // http异常
-    if (res.data && res.data.code == 4010) {
+    if (res.data && res.data.code === 4010) {
         window.top.postMessage('__LOGOUT__', '*');
       return;
     }
-    if (res.data && (res.data.state == 700004 || res.data.state == 700002)) {
+    if (res.data && (res.data.state === 700004 || res.data.state === 700002)) {
       window.top.postMessage('__LOGOUT__', '*');
       return;
     } else {
-      if (res.data && res.data.state != 200 && res.data.state != true) {
+      if (res.data && res.data.state !== 200 && res.data.state !== true) {
         // let msgNode = document.querySelectorAll('.ant-message');
         // if(!msgNode.length){
         // 230003 没有任何渠道权限，不统一在拦截器这里提示错误
-        if(res.data.state !== 230003 && res.data.state !=600000){
+        if(res.data.state !== 230003 && res.data.state !== 600000){
           message.error(res.data.message);
         }
         //   setTimeout(function() {

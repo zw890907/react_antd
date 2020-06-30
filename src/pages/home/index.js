@@ -26,15 +26,17 @@ class Home extends Component {
                 <Button type="primary" onClick={this.getData.bind(this, '1111')} danger>获取数据</Button>
                 <p>home: myData = {this.props.myData}</p>
                 <Button type="primary" onClick={this.getAppList} shape="round">列表</Button>
+                <p>{this.props.appList.categoryValue}</p>
             </div>
         )
     }
 }
 
 // 把store中的数据映射到组件的props
-const mapStateToProps = (state) => ({
-    // myData: state.getIn(['home', 'myData']),
-})
+// const mapStateToProps = (state) => ({
+//     myData: state.getIn(['home', 'myData']),
+//     appList: state.getIn(['home', 'appList']),
+// })
 
 // 把store的Dispatch映射到组件的props
 // const mapDispatchToProps = (dispatch) => ({
@@ -48,10 +50,14 @@ const mapStateToProps = (state) => ({
 //     }
 // })
 
+const mapStateToProps = (state) => ({
+    appList: state.home.appListData,
+})
+
 const mapDispatchToProps = (dispatch) => {
-    const { header } = dispatch
+    const { home } = dispatch
     return {
-        getAppList: header.loadAppListData
+        getAppList: home.loadAppListData
     }
 }
 
