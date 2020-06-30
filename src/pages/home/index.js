@@ -23,7 +23,7 @@ class Home extends Component {
             <div className="P-home">
                 <h1>Home page</h1>
                 <Button type="primary" onClick={this.goLogin}>跳转登录</Button>
-                <Button type="primary" onClick={this.getData.bind(this, '1234')} danger>获取数据</Button>
+                <Button type="primary" onClick={this.getData.bind(this, '999')} danger>获取数据</Button>
                 <p>home: myData = {this.props.myData}</p>
                 <Button type="primary" onClick={this.getAppList} shape="round">列表</Button>
                 <p>{this.props.appList.categoryValue}</p>
